@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+    <title>Vowel Quiz</title>
+</head>
+
+<body>
+    <div class="main-container">
+
+        <div class="score-container">
+            Score: <span id="score">0</span>/10
+        </div>
+        <div id="question-container">
+            <div class="question">
+                <h2>
+                    <!-- <span id="question-number">1</span>.  -->
+                    Match the <a href="https://en.wikipedia.org/wiki/IPA_vowel_chart_with_audio">
+                        <abbr title="International Phonetic Alphabet">IPA</abbr></a> vowel:
+                </h2>
+            </div>
+    
+            <div class="audio-player">
+                <i class="fa-solid fa-volume-high" id="audio-icon"></i>
+                <audio id="audio-player" controls>
+                    <!-- The source will be set dynamically -->
+                </audio>
+            </div>
+            <p id="response"></p>
+            <div class="answers-container" id="answers-container">
+                <!-- The answers will be generated dynamically -->
+            </div>
+    
+            <button class="next-question" id="next-question" disabled>Next Question</button>
+        </div>
+    </div>
+
+    <script>
+        var mainContainer = document.querySelector(".main-container");
+        var questionContainer = document.querySelector("#question-container");
+        var scoreDisplay = document.getElementById("score");
+        var questionNumberDisplay = document.getElementById("question-number");
+        var answersContainer = document.getElementById("answers-container");
+        var response = document.getElementById("response");
+        var nextQuestionButton = document.getElementById("next-question");
+        var audioPlayer = document.getElementById("audio-player");
+        var audioIcon = document.getElementById("audio-icon");
+
+        audioIcon.addEventListener("click", () => {
+            audioPlayer.play();
+        });
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+
+            return array;
+        }
+
+        var score = 0;
+        var currentQuestionIndex = 0;
+        var userMistakes = [];
+        var mistakeQuestionsIndex = 0;
+        var isMistakeMode = false;
+
+        var questions = [
+            {
+                sound: './vowels/i_Close_front_unrounded_vowel.ogg.mp3',
+                correctAnswer: 'i',
+                options: ['a', 'i', 'ɛ']
+            },
+            {
+                sound: './vowels/o_Close-mid_back_rounded_vowel.ogg',
+                correctAnswer: 'o',
+                options: ['o', 'u', 'ə']
+            },
+            {
+                sound: './vowels/u_Close_back_rounded_vowel.ogg',
+                correctAnswer: 'u',
+                options: ['u', 'o', 'a']
+            },
+            {
+                sound: './vowels/a_PR-open_front_unrounded_vowel.ogg',
+                correctAnswer: 'a',
+                options: ['a', 'ə', 'ɛ']
+            },
+            {
+                sound: './vowels/ə_Mid-central_vowel.ogg',
+                correctAnswer: 'ə',
+                options: ['ə', 'ɛ', 'u']
+            },
+            {
+                sound: './vowels/ɛ_Open-mid_front_unrounded_vowel.ogg',
+                correctAnswer: 'ɛ',
+                options: ['ɛ', 'a', 'i']
+            },
+        ];
+
+        function loadQuestion() {
+            response.innerHTML = "";
+            nextQuestionButton.disabled = true;
+
+            if (isMistakeMode && mistakeQuestionsIndex < 2) {
+                loadMistakeQuestion(mistakeQuestionsIndex);
+            } else {
+                isMistakeMode = false;
+                loadRegularQuestion(questions[currentQuestionIndex]);
+            }
+        }
+
+        function loadMistakeQuestion(index) {
+            var mistake = userMistakes[userMistakes.length - 1];
+      /**/      console.log(mistake);
+            if (index == 0)
+                var question = questions.find(q => q.correctAnswer === mistake.userAnswer);
+            else {
+                var question = questions.find(q => q.correctAnswer === mistake.correctAnswer);
+                currentQuestionIndex++;
+            }
+      /**/      console.log(question);
+
+            mistakeQuestionsIndex++;
+            loadRegularQuestion(question);
+        }
+
+        function loadRegularQuestion(question) {
+            //  questionNumberDisplay.textContent = currentQuestionIndex + 1;
+            audioPlayer.src = question.sound;
+            audioPlayer.play();
+
+            var shuffledOptions = shuffle([...question.options]);
+
+            answersContainer.innerHTML = "";
+
+            shuffledOptions.forEach(option => {
+                var answerDiv = document.createElement("div");
+
+                answerDiv.className = "answer";
+                answerDiv.textContent = option;
+
+                answerDiv.addEventListener("click", function () {
+                    handleAnswerClick(answerDiv.textContent == question.correctAnswer, answerDiv, question.correctAnswer);
+                });
+
+                answersContainer.appendChild(answerDiv);
+            });
+        }
+
+        function handleAnswerClick(isCorrect, answerDiv, correctAnswer) {
+            var answers = document.querySelectorAll(".answer");
+
+            answers.forEach(answer => {
+                answer.textContent == correctAnswer
+                    ? answer.classList.add("correct")
+                    : answer.classList.add("incorrect");
+
+                answer.style.pointerEvents = "none";
+            });
+
+            if (isCorrect) {
+                response.innerHTML = "Correct!";
+                score++;
+            } else {
+                response.innerHTML = "Incorrect!";
+                score = 0;
+                currentQuestionIndex = 0;
+
+                var userAnswer = answerDiv.textContent;
+
+                userMistakes = [];
+                userMistakes.push({ correctAnswer, userAnswer });
+
+           /**/     console.log(userMistakes);
+                isMistakeMode = true;
+
+                mistakeQuestionsIndex = 0;
+            }
+
+            scoreDisplay.textContent = score;
+            nextQuestionButton.disabled = false;
+        }
+
+        function quizCompleted() {
+            questionContainer.innerHTML = "";
+            var resultMessage = document.createElement("div");
+            resultMessage.innerHTML = `<h2>Quiz completed! </h2>`;
+            resultMessage.className = "result-message";
+            mainContainer.appendChild(resultMessage);
+        }
+
+        nextQuestionButton.addEventListener("click", () => {
+            if (isMistakeMode) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < 6) {
+                    loadQuestion();
+                } else {
+                    quizCompleted();
+                    userMistakes = [];
+                }
+            }
+        });
+
+        loadQuestion();
+
+    </script>
+
+</body>
+
+</html>
