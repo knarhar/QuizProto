@@ -105,8 +105,10 @@
                 
                 
                 $mainContainer.innerHTML = `<h2>Quiz Over!</h2><p>Your score: ${score} / ${questionsCount}</p>${$reloadQuizBtn}`;
-                $mainContainer.classList.add("result-container");
                 
+                $mainContainer.classList.remove("main-container");
+                $mainContainer.classList.add("result-container");
+
                 var reloadQuizBtn = $("#reloadQuiz");
                 
                 reloadQuizBtn.on("click", function () {

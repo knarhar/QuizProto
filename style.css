@@ -37,7 +37,7 @@
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: #f9f9f9;
-    height: 500px;
+    min-height: 500px;
 }
 
 .question {
@@ -126,4 +126,11 @@
 
 #reloadQuiz:hover {
     background-color: #0056b3;
+}
+
+@media only screen and (max-width: 450px) {
+    .result-container {
+        padding-top: 0;
+        height: 94vh;
+    }
 }
