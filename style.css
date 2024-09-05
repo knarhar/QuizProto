@@ -25,6 +25,21 @@
     font-weight: bold;
 }
 
+.result-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    height: 500px;
+}
+
 .question {
     font-size: 24px;
     margin-bottom: 20px;
@@ -95,5 +110,20 @@
 }
 
 .next-question:hover {
+    background-color: #0056b3;
+}
+
+#reloadQuiz {    
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#reloadQuiz:hover {
     background-color: #0056b3;
 }

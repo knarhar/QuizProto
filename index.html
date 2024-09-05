@@ -75,13 +75,13 @@
         var $nextQuestionBtn = $("#nextQuestionBtn");
         var $audioPlayer = $("#audioPlayer");
         var $audioIcon = $("#audioIcon");
-        
+
         var score = 0;
         var currentQuestionIndex = 0;
         var questionsCount = 10;
         var userMistakeList = [];
         var askedQuestions = [];
-        
+
         var vowels = [
             { vowel: "i", audio: "vowels/i_Close_front_unrounded_vowel.mp3" },
             { vowel: "u", audio: "vowels/u_Close_back_rounded_vowel.mp3" },
@@ -90,9 +90,9 @@
             { vowel: "a", audio: "vowels/a_PR-open_front_unrounded_vowel.mp3" },
             { vowel: "ɛ", audio: "vowels/ɛ_Open-mid_front_unrounded_vowel.mp3" }
         ];
-        
+
         $audioIcon.click(() => $audioPlayer.play());
-        
+
         function getRandomVowel() {
             const randomIndex = Math.floor(Math.random() * vowels.length);
 
@@ -101,7 +101,17 @@
 
         function displayQuestion() {
             if (currentQuestionIndex >= questionsCount) {
-                $mainContainer.innerHTML = `<h2>Quiz Over!</h2><p>Your score: ${score} / ${questionsCount}</p>`;
+                var $reloadQuizBtn = '<button type="button" id="reloadQuiz"><i class="fa-solid fa-rotate-right"></i>&nbsp; Try again</button>';
+                
+                
+                $mainContainer.innerHTML = `<h2>Quiz Over!</h2><p>Your score: ${score} / ${questionsCount}</p>${$reloadQuizBtn}`;
+                $mainContainer.classList.add("result-container");
+                
+                var reloadQuizBtn = $("#reloadQuiz");
+                
+                reloadQuizBtn.on("click", function () {
+                    document.location = String.Empty;
+                });
 
                 return;
             }
