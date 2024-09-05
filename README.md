@@ -39,7 +39,7 @@ This project is a web-based quiz game designed to help users learn and practice 
 
 ## Dependencies
 - **Font Awesome**: Used for the volume icon.
-- **Browser support for `audio` element**: Ensure the browser supports the HTML5 `audio` element for playing `.ogg` files.
+- **Browser support for `audio` element**: Ensure the browser supports the HTML5 `audio` element for playing `.mp3` files.
 
 ## License
 This project is licensed under the MIT License. Feel free to modify and distribute it as needed.
