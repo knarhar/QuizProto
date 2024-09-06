@@ -31,7 +31,7 @@
                     <!-- The source will be set dynamically -->
                 </audio>
             </div>
-            <p id="response"></p>
+            <p id="response">Response</p>
             <div class="answers-container" id="answersContainer">
                 <!-- The answers will be generated dynamically -->
             </div>
@@ -102,15 +102,15 @@
         function displayQuestion() {
             if (currentQuestionIndex >= questionsCount) {
                 var $reloadQuizBtn = '<button type="button" id="reloadQuiz"><i class="fa-solid fa-rotate-right"></i>&nbsp; Try again</button>';
-                
-                
+
+
                 $mainContainer.innerHTML = `<h2>Quiz Over!</h2><p>Your score: ${score} / ${questionsCount}</p>${$reloadQuizBtn}`;
-                
+
                 $mainContainer.classList.remove("main-container");
                 $mainContainer.classList.add("result-container");
 
                 var reloadQuizBtn = $("#reloadQuiz");
-                
+
                 reloadQuizBtn.on("click", function () {
                     document.location = String.Empty;
                 });
@@ -135,10 +135,12 @@
             $audioPlayer.src = currentVowel.audio;
             $audioPlayer.play();
 
-            $response.innerHTML = String.Empty;
+            $response.style.opacity = "0";
+
             $answersContainer.innerHTML = String.Empty;
 
             $nextQuestionBtn.disabled = true;
+            $nextQuestionBtn.classList.add("disabled");
 
             let answers = [currentVowel];
 
@@ -160,15 +162,19 @@
 
                 btn.click(function () {
                     const allButtons = $answersContainer.querySelectorAll(".answer");
+
                     allButtons.forEach(button => button.disabled = true);
+
+                    $response.style.opacity = "1";
 
                     if (vowel.vowel === currentVowel.vowel) {
                         btn.classList.add("correct");
-                        $response.textContent = "Correct!";
+                        $response.innerText = "Correct!";
+
                         score++;
                     } else {
                         btn.classList.add("incorrect");
-                        $response.textContent = `Incorrect! The correct answer was ${currentVowel.vowel}`;
+                        $response.innerHTML = `Incorrect! The correct answer was <b>${currentVowel.vowel}</b>`;
 
                         userMistakeList.push({
                             correctVowel: currentVowel,
@@ -184,6 +190,7 @@
 
                     $scoreDisplay.innerHTML = score;
                     $nextQuestionBtn.disabled = false;
+                    $nextQuestionBtn.classList.remove("disabled");
                 });
 
                 $answersContainer.appendChild(btn);

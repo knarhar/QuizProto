@@ -64,6 +64,10 @@
     display: none;
 }
 
+#response {
+    opacity: 0;
+}
+
 .answers-container {
     display: flex;
     flex-direction: column;
@@ -113,6 +117,11 @@
     background-color: #0056b3;
 }
 
+.disabled {
+    opacity: .5;
+    pointer-events: none;
+}
+
 #reloadQuiz {    
     margin-top: 20px;
     padding: 10px 20px;
@@ -131,6 +140,6 @@
 @media only screen and (max-width: 450px) {
     .result-container {
         padding-top: 0;
-        height: 94vh;
+        height: 70vh;
     }
 }
