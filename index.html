@@ -20,7 +20,8 @@
         <div id="questionContainer" class="question-container">
             <div class="question">
                 <h2>
-                    Match the <a href="https://en.wikipedia.org/wiki/IPA_vowel_chart_with_audio">
+                    Match the <a href="javascript:void(0);"
+                        onclick="window.open('https://en.wikipedia.org/wiki/IPA_vowel_chart_with_audio', '_blank',  'width=400px,height=600px,top=200px,left=400px');">
                         <abbr title="International Phonetic Alphabet">IPA</abbr></a> vowel:
                 </h2>
             </div>
@@ -36,6 +37,7 @@
                 <!-- The answers will be generated dynamically -->
             </div>
 
+            <button class="next-question" id="checkAnswerBtn">Check</button>
             <button class="next-question" id="nextQuestionBtn" disabled>Next Question</button>
         </div>
     </div>
@@ -73,6 +75,7 @@
         var $answersContainer = $("#answersContainer");
         var $response = $("#response");
         var $nextQuestionBtn = $("#nextQuestionBtn");
+        var $checkAnswerBtn = $("#checkAnswerBtn");
         var $audioPlayer = $("#audioPlayer");
         var $audioIcon = $("#audioIcon");
 
@@ -81,14 +84,34 @@
         var questionsCount = 10;
         var userMistakeList = [];
         var askedQuestions = [];
+        var currentVowel = null;
 
         var vowels = [
-            { vowel: "i", audio: "vowels/i_Close_front_unrounded_vowel.mp3" },
-            { vowel: "u", audio: "vowels/u_Close_back_rounded_vowel.mp3" },
-            { vowel: "o", audio: "vowels/o_Close-mid_back_rounded_vowel.mp3" },
-            { vowel: "ə", audio: "vowels/ə_Mid-central_vowel.mp3" },
-            { vowel: "a", audio: "vowels/a_PR-open_front_unrounded_vowel.mp3" },
-            { vowel: "ɛ", audio: "vowels/ɛ_Open-mid_front_unrounded_vowel.mp3" }
+            {
+                vowel: "i"
+                , audio: "vowels/i_Close_front_unrounded_vowel.mp3"
+                , link: "https://en.wikipedia.org/wiki/Close_front_unrounded_vowel"
+            }, {
+                vowel: "u"
+                , audio: "vowels/u_Close_back_rounded_vowel.mp3"
+                , link: "https://en.wikipedia.org/wiki/Close_back_rounded_vowel"
+            }, {
+                vowel: "o"
+                , audio: "vowels/o_Close-mid_back_rounded_vowel.mp3"
+                , link: "https://en.wikipedia.org/wiki/Close-mid_back_rounded_vowel"
+            }, {
+                vowel: "ə"
+                , audio: "vowels/ə_Mid-central_vowel.mp3"
+                , link: "https://en.wikipedia.org/wiki/mid_central_vowel"
+            }, {
+                vowel: "a"
+                , audio: "vowels/a_PR-open_front_unrounded_vowel.mp3"
+                , link: "https://en.wikipedia.org/wiki/Open_front_unrounded_vowel"
+            }, {
+                vowel: "ɛ"
+                , audio: "vowels/ɛ_Open-mid_front_unrounded_vowel.mp3"
+                , link: "https://en.wikipedia.org/wiki/Open-mid_front_unrounded_vowel"
+            }
         ];
 
         $audioIcon.click(() => $audioPlayer.play());
@@ -99,10 +122,57 @@
             return vowels[randomIndex];
         }
 
+
+        function checkAnswerHandle(currentVowel) {
+            const allAnswerBtns = $answersContainer.querySelectorAll(".answer");
+            const $checkedAnswerBtn = document.querySelector("#checked");
+
+            if (!$checkedAnswerBtn) {
+                $response.innerText = "Please select an answer!";
+                return;
+            }
+
+            $response.style.opacity = "1";
+            $checkedAnswerBtn.removeAttribute("id");
+
+            if ($checkedAnswerBtn.textContent == currentVowel.vowel) {
+                $response.innerText = "Correct!";
+                score++;
+            } else {
+                $checkedAnswerBtn.classList.add("incorrect");
+                $response.innerHTML = `Incorrect! The correct answer was <b>${currentVowel.vowel}</b>`;
+                userMistakeList.push({
+                    correctVowel: currentVowel,
+                    userMistake: vowels.find(vowel => vowel.vowel == $checkedAnswerBtn.textContent)
+                });
+            }
+
+            allAnswerBtns.forEach(button => {
+                if (button.textContent == currentVowel.vowel) {
+                    button.classList.add("correct");
+                }
+
+                button.disabled = true;
+                button.style.pointerEvents = "none";
+            });
+
+            $scoreDisplay.innerHTML = score;
+
+            $checkAnswerBtn.disabled = true;
+            $checkAnswerBtn.style.opacity = "0.4";
+            $checkAnswerBtn.style.pointerEvents = "none";
+
+            $nextQuestionBtn.disabled = false;
+            $nextQuestionBtn.classList.remove("disabled");
+        }
+
+        $checkAnswerBtn.addEventListener("click", function () {
+            checkAnswerHandle(currentVowel);
+        });
+
         function displayQuestion() {
             if (currentQuestionIndex >= questionsCount) {
                 var $reloadQuizBtn = '<button type="button" id="reloadQuiz"><i class="fa-solid fa-rotate-right"></i>&nbsp; Try again</button>';
-
 
                 $mainContainer.innerHTML = `<h2>Quiz Over!</h2><p>Your score: ${score} / ${questionsCount}</p>${$reloadQuizBtn}`;
 
@@ -118,7 +188,10 @@
                 return;
             }
 
-            let currentVowel;
+
+            $checkAnswerBtn.disabled = false;            
+            $checkAnswerBtn.style.opacity = "1";
+            $checkAnswerBtn.style.pointerEvents = "All";
 
             if (userMistakeList.length > 0) {
                 if (userMistakeList[0].userMistake) {
@@ -161,36 +234,9 @@
                 btn.textContent = vowel.vowel;
 
                 btn.click(function () {
-                    const allButtons = $answersContainer.querySelectorAll(".answer");
+                    document.querySelectorAll(".answer").forEach(button => button.removeAttribute("id"));
 
-                    allButtons.forEach(button => button.disabled = true);
-
-                    $response.style.opacity = "1";
-
-                    if (vowel.vowel === currentVowel.vowel) {
-                        btn.classList.add("correct");
-                        $response.innerText = "Correct!";
-
-                        score++;
-                    } else {
-                        btn.classList.add("incorrect");
-                        $response.innerHTML = `Incorrect! The correct answer was <b>${currentVowel.vowel}</b>`;
-
-                        userMistakeList.push({
-                            correctVowel: currentVowel,
-                            userMistake: vowels.find(vowel => vowel.vowel == btn.textContent)
-                        });
-
-                        allButtons.forEach(button => {
-                            if (button.textContent == currentVowel.vowel) {
-                                button.classList.add("correct");
-                            }
-                        });
-                    }
-
-                    $scoreDisplay.innerHTML = score;
-                    $nextQuestionBtn.disabled = false;
-                    $nextQuestionBtn.classList.remove("disabled");
+                    btn.id = "checked";
                 });
 
                 $answersContainer.appendChild(btn);
