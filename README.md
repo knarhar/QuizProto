@@ -49,7 +49,3 @@ This project is licensed under the MIT License, allowing for open use, modificat
 
 ## Author
 This project was developed as an engaging way to help learners practice IPA vowel sounds through interactive quizzes.
-
----
-
-This update includes all the essential details for your project, along with information on how users can run, extend, and customize the quiz. Let me know if you need any additional adjustments!
