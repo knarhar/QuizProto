@@ -33,7 +33,7 @@
                 <div class="question">
                     <h2>
                         Match the <a href="javascript:void(0);"
-                            onclick="window.open('https://en.wikipedia.org/wiki/IPA_vowel_chart_with_audio', '_blank',  'width=400px,height=600px,top=200px,left=400px');">
+                            onclick="window.open('https://en.wikipedia.org/wiki/IPA_vowel_chart_with_audio', '_blank',  'width=400px,height=600px,top=100px,left=500px');">
                             <abbr title="International Phonetic Alphabet">IPA</abbr></a> vowel:
                     </h2>
                 </div>
@@ -100,9 +100,12 @@
         var $secondsDisplay = $("#seconds");
 
         var $answersContainer = $("#answersContainer");
+
         var $response = $("#response");
+
         var $nextQuestionBtn = $("#nextQuestionBtn");
         var $checkAnswerBtn = $("#checkAnswerBtn");
+
         var $audioPlayer = $("#audioPlayer");
         var $audioIcon = $("#audioIcon");
 
@@ -110,44 +113,45 @@
         var currentQuestionIndex = 0;
         var questionsCount = 10;
         var userMistakeList = [];
-        var askedQuestions = [];
         var currentVowel = null;
 
         var vowels = [
             {
                 vowel: "i"
-                , audio: "vowels/i_Close_front_unrounded_vowel.mp3"
-                , link: "https://en.wikipedia.org/wiki/Close_front_unrounded_vowel"
+              , audio: "vowels/i_Close_front_unrounded_vowel.mp3"
+              , link: "https://en.wikipedia.org/wiki/Close_front_unrounded_vowel"
             }, {
                 vowel: "u"
-                , audio: "vowels/u_Close_back_rounded_vowel.mp3"
-                , link: "https://en.wikipedia.org/wiki/Close_back_rounded_vowel"
+              , audio: "vowels/u_Close_back_rounded_vowel.mp3"
+              , link: "https://en.wikipedia.org/wiki/Close_back_rounded_vowel"
             }, {
                 vowel: "o"
-                , audio: "vowels/o_Close-mid_back_rounded_vowel.mp3"
-                , link: "https://en.wikipedia.org/wiki/Close-mid_back_rounded_vowel"
+              , audio: "vowels/o_Close-mid_back_rounded_vowel.mp3"
+              , link: "https://en.wikipedia.org/wiki/Close-mid_back_rounded_vowel"
             }, {
                 vowel: "ə"
-                , audio: "vowels/ə_Mid-central_vowel.mp3"
-                , link: "https://en.wikipedia.org/wiki/mid_central_vowel"
+              , audio: "vowels/ə_Mid-central_vowel.mp3"
+              , link: "https://en.wikipedia.org/wiki/mid_central_vowel"
             }, {
                 vowel: "a"
-                , audio: "vowels/a_PR-open_front_unrounded_vowel.mp3"
-                , link: "https://en.wikipedia.org/wiki/Open_front_unrounded_vowel"
+              , audio: "vowels/a_PR-open_front_unrounded_vowel.mp3"
+              , link: "https://en.wikipedia.org/wiki/Open_front_unrounded_vowel"
             }, {
                 vowel: "ɛ"
-                , audio: "vowels/ɛ_Open-mid_front_unrounded_vowel.mp3"
-                , link: "https://en.wikipedia.org/wiki/Open-mid_front_unrounded_vowel"
+              , audio: "vowels/ɛ_Open-mid_front_unrounded_vowel.mp3"
+              , link: "https://en.wikipedia.org/wiki/Open-mid_front_unrounded_vowel"
             }
         ];
 
         $audioIcon.click(() => $audioPlayer.play());
 
-        var $modal = document.getElementById("modal");
-        var closeModal = document.getElementsByClassName("close")[0];
+        //#region Timer & modal window
+        
+        var $modal = $("#modal");
+        var closeModal = $(".close");
 
         function openModal(text) {
-            document.getElementById("modalText").innerText = text;
+            $("#modalText").innerText = text;
             $modal.style.display = "block";
         }
 
@@ -186,6 +190,7 @@
             }, 1000);
         }
 
+        //#endregion
 
         function getRandomVowel() {
             const randomIndex = Math.floor(Math.random() * vowels.length);
@@ -212,7 +217,7 @@
                 score++;
             } else {
                 $checkedAnswerBtn.classList.add("incorrect");
-                $response.innerHTML = `Incorrect! The correct answer was <b>${currentVowel.vowel}</b>.`;
+                $response.innerHTML = `Incorrect! The correct answer was <a href="javascript:void(0)" onclick="getVowelLink('${currentVowel.link}')">${currentVowel.vowel}</a>.`;
                 $response.classList.add('incorrect');
                 
                 userMistakeList.push({
@@ -242,6 +247,10 @@
         $checkAnswerBtn.addEventListener("click", function () {
             checkAnswerHandle(currentVowel);
         });
+
+        function getVowelLink(link) {
+            return window.open(link, '_blank', 'width=400px,height=600px,top=100px,left=500px');
+        }
 
         function displayQuestion() {
 
@@ -321,6 +330,7 @@
         function startQuiz() {
             $startPage.style.display = "none";
             $quizContainer.style.display = "block";
+
             countDown();
             displayQuestion();
         }
