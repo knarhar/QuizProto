@@ -1,6 +1,11 @@
 .start-page {
     text-align: center;
-    margin-top: 20%;
+    width: 45%;
+    margin: 19% auto 0;
+}
+
+.start-page p {
+    text-align: left;
 }
 
 .quiz-container {
