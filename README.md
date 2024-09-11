@@ -1,48 +1,51 @@
 # Vowel Quiz Application
 
 ## Project Overview
-This project is a web-based quiz game designed to help users learn and practice the International Phonetic Alphabet (IPA) vowel sounds. The quiz plays vowel sounds and presents the user with multiple-choice answers. Users must match the correct vowel sound to its corresponding symbol.
+The **Vowel Quiz Application** is a web-based tool designed to help users practice and learn the **International Phonetic Alphabet (IPA)** vowel sounds. Through an interactive quiz format, users can listen to vowel sounds and match them to the correct IPA symbols.
 
 ## Features
-- **Interactive Quiz**: The quiz consists of 10 questions where the user listens to a vowel sound and chooses the correct IPA symbol.
-- **Multiple Choice**: Each question presents 4 possible answers, randomly shuffled.
-- **Score Tracking**: The user's score is tracked and displayed after each question.
-- **Mistake Adaptation**: If a user selects an incorrect answer, the quiz tracks the mistake and revisits it in subsequent questions to help with learning.
-- **Audio Playback**: An audio player is embedded to play the vowel sounds, and users can click an icon to repeat the sound.
+- **Interactive Quiz**: A series of 10 questions where users listen to a vowel sound and choose the corresponding IPA symbol.
+- **Multiple Choice Answers**: Each question provides four possible answers, randomly shuffled to encourage careful listening.
+- **Real-time Scoring**: The user's score is updated after each question and displayed throughout the quiz.
+- **Adaptive Learning**: If a mistake is made, the quiz remembers and revisits similar questions, helping users to reinforce their learning.
+- **Audio Playback**: An embedded audio player lets users replay the vowel sound as needed.
+- **Time Warning**: A modal popup notifies users when only one minute remains in the quiz, enhancing time management.
 
 ## Technologies Used
-- **HTML**: For the basic structure of the webpage.
-- **CSS**: For styling the application.
-- **JavaScript**: For the quiz logic, including handling user input, scoring, and dynamically generating questions.
-- **Font Awesome**: For the volume icon in the audio player.
-- **Audio Files**: The vowel sounds are included as audio files (in `.ogg` format) and dynamically loaded into the audio player.
+- **HTML**: To structure the application and present the quiz interface.
+- **CSS**: For styling and responsive design.
+- **JavaScript**: Provides the logic for quiz functionality, including handling user input, scoring, dynamic content generation, and managing mistakes.
+- **Font Awesome**: Used for icons, specifically the volume control.
+- **Audio Files**: Vowel sounds are provided as `.mp3` files, dynamically loaded into the audio player.
 
-## File Structure
-- `index.html`: The main HTML file that contains the structure of the quiz.
-- `style.css`: Contains all the styling for the quiz layout and design.
-- `vowels/`: A folder containing the vowel sound files in `.ogg` format.
-- `README.md`: This file with the project description.
+## Project Structure
+- `index.html`: The main HTML file containing the structure and logic for the quiz.
+- `style.css`: Stylesheet responsible for the layout, design, and responsive elements.
+- `vowels/`: Directory containing `.mp3` files for each vowel sound.
+- `README.md`: Project description and instructions (this file).
 
-## How to Use
-1. Open `index.html` in a web browser.
-2. The quiz will automatically start by loading the first question.
-3. Click on the volume icon or use the audio player to play the vowel sound.
-4. Select the correct IPA symbol from the multiple-choice answers.
-5. If you answer correctly, your score will increase. If you answer incorrectly, the correct answer will be displayed, and the mistake will be tracked for future questions.
-6. After answering, click "Next Question" to move on.
-7. The quiz continues for 10 questions, after which the final score is displayed.
+## How to Run the Project
+1. Download the project files or clone the repository.
+2. Open `index.html` in any modern web browser.
+3. The quiz will start once you press the "Play" button.
+4. Listen to the vowel sound by clicking the volume icon or using the audio player.
+5. Select the correct IPA symbol from the provided multiple-choice answers.
+6. After selecting an answer, click "Next Question" to proceed.
+7. Your score is updated after each question, and the quiz will adapt if you make any mistakes.
+8. After answering all 10 questions, your final score is displayed.
 
 ## How to Extend the Project
-- **Add more vowels**: You can add more vowel sounds to the `vowels` array in the JavaScript by providing new audio files and corresponding IPA symbols.
-- **Change the number of questions**: You can adjust the `questionsCount` variable in the JavaScript to modify the number of questions in the quiz.
-- **Style customization**: Modify the `style.css` file to change the appearance of the quiz.
+- **Add New Vowel Sounds**: Expand the quiz by adding more vowel sounds. To do this, include new `.mp3` audio files in the `vowels/` folder and update the vowel data array in JavaScript with corresponding IPA symbols.
+- **Increase/Decrease Number of Questions**: Modify the `questionsCount` variable in the JavaScript to adjust the total number of questions in the quiz.
+- **Customize Styling**: Tweak the `style.css` file to change colors, layout, fonts, or button styles.
+- **Additional Quiz Features**: You can implement new features such as a timer-based scoring system or track user progress across multiple quiz sessions.
 
 ## Dependencies
-- **Font Awesome**: Used for the volume icon.
-- **Browser support for `audio` element**: Ensure the browser supports the HTML5 `audio` element for playing `.mp3` files.
+- **Font Awesome**: For the volume icon.
+- **HTML5 Audio Element**: The quiz relies on modern browsers that support the `<audio>` element to play `.mp3` files.
 
 ## License
-This project is licensed under the MIT License. Feel free to modify and distribute it as needed.
+This project is licensed under the MIT License, allowing for open use, modification, and distribution.
 
 ## Author
-This project was created as a fun way to practice and learn IPA vowel sounds through interactive quizzes.
+This project was developed as an engaging way to help learners practice IPA vowel sounds through interactive quizzes.
