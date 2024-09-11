@@ -10,14 +10,6 @@
     <link rel="stylesheet" href="style.css">
     <title>Vowel Quiz</title>
     <style>
-        .start-page {
-            text-align: center;
-            margin-top: 20%;
-        }
-
-        .quiz-container {
-            display: none;
-        }
     </style>
 </head>
 
@@ -28,9 +20,11 @@
         <button class="button" id="startQuizBtn">Play</button>
     </div>
 
+
     <div class="quiz-container">
         <div class="main-container">
-            <div class="timer" id="timer"><span id="minutes">10</span>:<span id="seconds">00</span></div>
+            <div class="timer" id="timer">Time remaining: <span id="minutes">10</span>:<span id="seconds">00</span>
+            </div>
             <div class="score-container">
                 Score: <span id="score">0</span>/10
             </div>
@@ -55,8 +49,15 @@
                 </div>
 
                 <button class="button" id="checkAnswerBtn">Check</button>
-                <button class="button" id="nextQuestionBtn" disabled>Next Question</button>
+                <button class="button" id="nextQuestionBtn" disabled>Next</button>
             </div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="modalText">Время почти истекло! Осталась 1 минута!</p>
         </div>
     </div>
 
@@ -141,6 +142,24 @@
 
         $audioIcon.click(() => $audioPlayer.play());
 
+        var $modal = document.getElementById("modal");
+        var closeModal = document.getElementsByClassName("close")[0];
+
+        function openModal(text) {
+            document.getElementById("modalText").innerText = text;
+            $modal.style.display = "block";
+        }
+
+        closeModal.onclick = function () {
+            $modal.style.display = "none";
+        };
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                $modal.style.display = "none";
+            }
+        };
+
         function countDown() {
             let count = 600;
 
@@ -153,9 +172,14 @@
                     console.log(count / 60 + " minutes remained");
                 }
 
+                if (count === 60) {
+                    openModal("1 minute left!");
+                }
+
                 if (count == 0) {
                     clearInterval(timer);
-                    console.log("Time's up!");
+                    openModal("Time is over!");
+                    setTimeout(() => document.location = String.Empty, 5000);
                 }
 
             }, 1000);
@@ -178,14 +202,18 @@
             }
 
             $response.style.opacity = "1";
+            $response.removeAttribute('class');
             $checkedAnswerBtn.removeAttribute("id");
 
             if ($checkedAnswerBtn.textContent == currentVowel.vowel) {
                 $response.innerText = "Correct!";
+                $response.classList.add('correct');
                 score++;
             } else {
                 $checkedAnswerBtn.classList.add("incorrect");
-                $response.innerHTML = `Incorrect! The correct answer was <b>${currentVowel.vowel}</b>`;
+                $response.innerHTML = `Incorrect! The correct answer was <b>${currentVowel.vowel}</b>.`;
+                $response.classList.add('incorrect');
+                
                 userMistakeList.push({
                     correctVowel: currentVowel,
                     userMistake: vowels.find(vowel => vowel.vowel == $checkedAnswerBtn.textContent)
@@ -204,11 +232,10 @@
             $scoreDisplay.innerHTML = score;
 
             $checkAnswerBtn.disabled = true;
-            $checkAnswerBtn.style.opacity = "0.4";
-            $checkAnswerBtn.style.pointerEvents = "none";
+            $checkAnswerBtn.style.display = "none";
 
             $nextQuestionBtn.disabled = false;
-            $nextQuestionBtn.classList.remove("disabled");
+            $nextQuestionBtn.style.display = "block";
         }
 
         $checkAnswerBtn.addEventListener("click", function () {
@@ -220,7 +247,7 @@
             if (currentQuestionIndex >= questionsCount) {
                 var $reloadQuizBtn = '<button type="button" id="reloadQuiz"><i class="fa-solid fa-rotate-right"></i>&nbsp; Try again</button>';
 
-                $mainContainer.innerHTML = `<h2>Quiz Over!</h2><p>Your score: ${score} / ${questionsCount}</p>${$reloadQuizBtn}`;
+                $mainContainer.innerHTML = `<h1>Quiz Over!</h1><p>Your total score: <b>${score} / ${questionsCount}</b></p>${$reloadQuizBtn}`;
 
                 $mainContainer.classList.remove("main-container");
                 $mainContainer.classList.add("result-container");
@@ -235,7 +262,7 @@
             }
 
             $checkAnswerBtn.disabled = false;
-            $checkAnswerBtn.style.opacity = "1";
+            $checkAnswerBtn.style.display = "block";
             $checkAnswerBtn.style.pointerEvents = "All";
 
             if (userMistakeList.length > 0) {
@@ -258,7 +285,7 @@
             $answersContainer.innerHTML = String.Empty;
 
             $nextQuestionBtn.disabled = true;
-            $nextQuestionBtn.classList.add("disabled");
+            $nextQuestionBtn.style.display = "none";
 
             let answers = [currentVowel];
 
