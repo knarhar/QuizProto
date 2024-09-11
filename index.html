@@ -9,36 +9,54 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="style.css">
     <title>Vowel Quiz</title>
+    <style>
+        .start-page {
+            text-align: center;
+            margin-top: 20%;
+        }
+
+        .quiz-container {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
 
-    <div class="main-container">
-        <div class="score-container">
-            Score: <span id="score">0</span>/10
-        </div>
-        <div id="questionContainer" class="question-container">
-            <div class="question">
-                <h2>
-                    Match the <a href="javascript:void(0);"
-                        onclick="window.open('https://en.wikipedia.org/wiki/IPA_vowel_chart_with_audio', '_blank',  'width=400px,height=600px,top=200px,left=400px');">
-                        <abbr title="International Phonetic Alphabet">IPA</abbr></a> vowel:
-                </h2>
-            </div>
+    <div class="start-page">
+        <h1>Welcome to the Vowel Quiz!</h1>
+        <button class="button" id="startQuizBtn">Play</button>
+    </div>
 
-            <div class="audio-player">
-                <i class="fa-solid fa-volume-high" id="audioIcon"></i>
-                <audio id="audioPlayer" controls>
-                    <!-- The source will be set dynamically -->
-                </audio>
+    <div class="quiz-container">
+        <div class="main-container">
+            <div class="timer" id="timer"><span id="minutes">10</span>:<span id="seconds">00</span></div>
+            <div class="score-container">
+                Score: <span id="score">0</span>/10
             </div>
-            <p id="response">Response</p>
-            <div class="answers-container" id="answersContainer">
-                <!-- The answers will be generated dynamically -->
-            </div>
+            <div id="questionContainer" class="question-container">
+                <div class="question">
+                    <h2>
+                        Match the <a href="javascript:void(0);"
+                            onclick="window.open('https://en.wikipedia.org/wiki/IPA_vowel_chart_with_audio', '_blank',  'width=400px,height=600px,top=200px,left=400px');">
+                            <abbr title="International Phonetic Alphabet">IPA</abbr></a> vowel:
+                    </h2>
+                </div>
 
-            <button class="next-question" id="checkAnswerBtn">Check</button>
-            <button class="next-question" id="nextQuestionBtn" disabled>Next Question</button>
+                <div class="audio-player">
+                    <i class="fa-solid fa-volume-high" id="audioIcon"></i>
+                    <audio id="audioPlayer" controls>
+                        <!-- The source will be set dynamically -->
+                    </audio>
+                </div>
+                <p id="response">Response</p>
+                <div class="answers-container" id="answersContainer">
+                    <!-- The answers will be generated dynamically -->
+                </div>
+
+                <button class="button" id="checkAnswerBtn">Check</button>
+                <button class="button" id="nextQuestionBtn" disabled>Next Question</button>
+            </div>
         </div>
     </div>
 
@@ -70,8 +88,15 @@
             return array;
         }
 
+        var $startPage = $(".start-page");
+        var $quizContainer = $(".quiz-container");
+
         var $mainContainer = $(".main-container");
         var $scoreDisplay = $("#score");
+
+        var $minutesDisplay = $("#minutes");
+        var $secondsDisplay = $("#seconds");
+
         var $answersContainer = $("#answersContainer");
         var $response = $("#response");
         var $nextQuestionBtn = $("#nextQuestionBtn");
@@ -116,12 +141,32 @@
 
         $audioIcon.click(() => $audioPlayer.play());
 
+        function countDown() {
+            let count = 600;
+
+            const timer = setInterval(function () {
+                count--;
+                $secondsDisplay.innerText = (count % 60).toString().length == 1 ? ('0' + (count % 60).toString()) : count % 60;
+
+                if (count % 60 == 0) {
+                    $minutesDisplay.innerText = Math.floor(count / 60);
+                    console.log(count / 60 + " minutes remained");
+                }
+
+                if (count == 0) {
+                    clearInterval(timer);
+                    console.log("Time's up!");
+                }
+
+            }, 1000);
+        }
+
+
         function getRandomVowel() {
             const randomIndex = Math.floor(Math.random() * vowels.length);
 
             return vowels[randomIndex];
         }
-
 
         function checkAnswerHandle(currentVowel) {
             const allAnswerBtns = $answersContainer.querySelectorAll(".answer");
@@ -171,6 +216,7 @@
         });
 
         function displayQuestion() {
+
             if (currentQuestionIndex >= questionsCount) {
                 var $reloadQuizBtn = '<button type="button" id="reloadQuiz"><i class="fa-solid fa-rotate-right"></i>&nbsp; Try again</button>';
 
@@ -188,8 +234,7 @@
                 return;
             }
 
-
-            $checkAnswerBtn.disabled = false;            
+            $checkAnswerBtn.disabled = false;
             $checkAnswerBtn.style.opacity = "1";
             $checkAnswerBtn.style.pointerEvents = "All";
 
@@ -245,7 +290,14 @@
             currentQuestionIndex++;
         }
 
-        displayQuestion();
+        function startQuiz() {
+            $startPage.style.display = "none";
+            $quizContainer.style.display = "block";
+            countDown();
+            displayQuestion();
+        }
+
+        $("#startQuizBtn").click(startQuiz);
 
         $nextQuestionBtn.click(displayQuestion);
     </script>
