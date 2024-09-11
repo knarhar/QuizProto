@@ -138,31 +138,13 @@
     background-color: #0056b3;
 }
 
-.disabled {
-    opacity: 0;
-    pointer-events: none;
+.try-again {
+    width: fit-content;
 }
 
 .timer {
     margin: 10px 0;
 }
-
-#reloadQuiz {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#reloadQuiz:hover {
-    background-color: #0056b3;
-}
-
-
 
 /* Модальное окно */
 .modal {
